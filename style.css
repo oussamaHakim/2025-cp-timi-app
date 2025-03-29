@@ -1,0 +1,467 @@
+.number-box {
+  min-width: 120px; /* Augmentation de la largeur pour accommoder les nombres à 4 chiffres */
+  height: 60px;
+  border: 2px solid #3b82f6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  background-color: white;
+  padding: 0 15px; /* Ajout de padding horizontal */
+}
+
+/* Styles spécifiques pour chaque position numérique */
+.milliers-label,
+.input-milliers {
+  color: #2563eb; /* Bleu foncé */
+  border-color: #2563eb;
+}
+
+.centaines-label,
+.input-centaines {
+  color: #059669; /* Vert */
+  border-color: #059669;
+}
+
+.dizaines-label,
+.input-dizaines {
+  color: #d97706; /* Orange */
+  border-color: #d97706;
+}
+
+.unites-label,
+.input-unites {
+  color: #dc2626; /* Rouge */
+  border-color: #dc2626;
+}
+
+/* Style pour les inputs */
+.input-box {
+  width: 90%;
+  height: 90%;
+  text-align: center;
+  font-size: 28px;
+  border: none;
+  outline: none;
+}
+
+.input-milliers {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+}
+
+.input-centaines {
+  background-color: rgba(5, 150, 105, 0.1);
+  color: #059669;
+}
+
+.input-dizaines {
+  background-color: rgba(217, 119, 6, 0.1);
+  color: #d97706;
+}
+
+.input-unites {
+  background-color: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+}
+
+/* Tableau de numération */
+.tableau-numeration {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #3b82f6;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 500px; /* Augmentation de la largeur maximale */
+  margin: 0 auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tableau-header {
+  display: flex;
+}
+
+.tableau-row {
+  display: flex;
+}
+
+.tableau-cell {
+  flex: 1;
+  height: 70px; /* Augmentation de la hauteur */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  font-size: 22px;
+  font-weight: bold;
+  padding: 0 10px; /* Ajout de padding horizontal */
+  text-align: center;
+}
+
+/* En-têtes du tableau avec couleurs spécifiques */
+.milliers-header {
+  background-color: rgba(37, 99, 235, 0.3);
+  color: #2563eb;
+}
+
+.centaines-header {
+  background-color: rgba(5, 150, 105, 0.3);
+  color: #059669;
+}
+
+.dizaines-header {
+  background-color: rgba(217, 119, 6, 0.3);
+  color: #d97706;
+}
+
+.unites-header {
+  background-color: rgba(220, 38, 38, 0.3);
+  color: #dc2626;
+}
+
+/* Cellules pour l'affichage du nombre */
+.milliers-cell {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: #2563eb;
+  font-size: 28px;
+}
+
+.centaines-cell {
+  background-color: rgba(5, 150, 105, 0.1);
+  color: #059669;
+  font-size: 28px;
+}
+
+.dizaines-cell {
+  background-color: rgba(217, 119, 6, 0.1);
+  color: #d97706;
+  font-size: 28px;
+}
+
+.unites-cell {
+  background-color: rgba(220, 38, 38, 0.1);
+  color: #dc2626;
+  font-size: 28px;
+}
+
+/* Animation de satisfaction quand la cellule est correcte */
+.correct-cell {
+  animation: pulse 1s;
+}
+
+/* Styles pour les chiffres glissables */
+.digit {
+  width: 50px; /* Légèrement plus petit */
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #6b7280;
+  border-radius: 8px;
+  font-size: 26px; /* Police plus grande */
+  font-weight: bold;
+  background-color: white;
+  cursor: grab;
+  user-select: none;
+  transition: transform 0.1s, box-shadow 0.2s;
+  margin: 0 auto; /* Centrage */
+}
+
+.digit:hover {
+  transform: translateY(-3px); /* Moins élevé pour économiser de l'espace */
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+}
+
+.digit:active {
+  cursor: grabbing;
+}
+
+/* Style pour indiquer que le chiffre peut être récupéré */
+.drop-zone .digit:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+}
+
+.drop-zone .digit:hover::after {
+  content: "↩";
+  position: absolute;
+  top: -15px;
+  right: -10px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 14px;
+  color: #3b82f6;
+}
+
+/* Styles pour les zones de dépôt */
+.drop-zone {
+  background-color: rgba(219, 234, 254, 0.3);
+  border: 2px dashed #93c5fd;
+  min-height: 70px; /* Même hauteur que les cellules d'en-tête */
+  padding: 5px; /* Padding pour une apparence plus aérée */
+}
+
+.drop-zone.highlight {
+  background-color: rgba(219, 234, 254, 0.7);
+  border-style: solid;
+}
+
+.drop-zone.filled {
+  border-style: solid;
+  border-color: #3b82f6;
+}
+
+/* Styles spécifiques pour les zones de dépôt */
+#drop-milliers.filled .digit {
+  color: #2563eb;
+  border-color: #2563eb;
+  background-color: rgba(37, 99, 235, 0.1);
+}
+
+#drop-centaines.filled .digit {
+  color: #059669;
+  border-color: #059669;
+  background-color: rgba(5, 150, 105, 0.1);
+}
+
+#drop-dizaines.filled .digit {
+  color: #d97706;
+  border-color: #d97706;
+  background-color: rgba(217, 119, 6, 0.1);
+}
+
+#drop-unites.filled .digit {
+  color: #dc2626;
+  border-color: #dc2626;
+  background-color: rgba(220, 38, 38, 0.1);
+}
+
+/* Animation pour la correction */
+.correct {
+  animation: pulse 1s;
+}
+
+.incorrect {
+  animation: shake 0.5s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+.confetti {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #f00;
+  border-radius: 50%;
+  animation: fall 3s ease-in infinite;
+}
+
+@keyframes fall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(600px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+.shake {
+  animation: shake 0.5s;
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+/* Ajouter un tooltip pour indiquer qu'on peut double-cliquer */
+.tooltip {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+/* Animation pour indiquer double-clic */
+@keyframes pulse-border {
+  0% {
+    border-color: #6b7280;
+  }
+  50% {
+    border-color: #3b82f6;
+    border-width: 3px;
+  }
+  100% {
+    border-color: #6b7280;
+  }
+}
+
+.drop-zone .digit:hover {
+  animation: pulse-border 1s infinite;
+}
+
+/* Style pour la grille de chiffres */
+.digit-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 colonnes par défaut */
+  gap: 10px; /* Espace réduit entre les chiffres */
+  justify-content: center;
+  width: 100%;
+  max-width: 280px; /* Limiter la largeur pour correspondre au tableau */
+  margin: 0 auto;
+}
+
+/* Style pour plus de 4 chiffres */
+.digit-grid.larger {
+  grid-template-columns: repeat(5, 1fr); /* 5 colonnes pour 8+ chiffres */
+}
+
+/* Assurer l'alignement des colonnes */
+#digitContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  min-height: 120px; /* Hauteur pour accommoder plus de chiffres si nécessaire */
+  margin-top: 40px; /* Plus d'espace entre le nombre et la grille */
+}
+
+/* Pour les écrans plus petits */
+@media (max-width: 480px) {
+  .digit-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+  }
+
+  .digit {
+    width: 45px;
+    height: 45px;
+    font-size: 22px;
+  }
+}
+
+/* Style pour le nombre cible à décomposer */
+.target-number {
+  display: inline-block;
+  background: linear-gradient(45deg, #ff5e5e, #ff9d5e);
+  color: white;
+  font-size: 42px;
+  font-weight: bold;
+  padding: 15px 30px;
+  border-radius: 15px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  margin: 0 auto;
+  margin-top: 20px; /* Ajouter de l'espace au-dessus */
+  border: 3px solid #ff7e5f;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  position: relative;
+  min-width: 180px;
+}
+
+.target-number::before {
+  content: "Nombre à décomposer";
+  position: absolute;
+  top: -25px; /* Positionné plus haut pour plus d'espace */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff8e1; /* Couleur de fond plus douce */
+  color: #ff7e5f;
+  font-size: 15px;
+  padding: 3px 12px; /* Padding horizontal augmenté */
+  border-radius: 20px; /* Coins plus arrondis */
+  font-weight: bold;
+  border: 2px solid #ff7e5f; /* Ajout d'une bordure */
+  white-space: nowrap; /* Empêche le retour à la ligne */
+}
+
+/* Animation pour le titre du jeu */
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+/* Style du titre avec animation */
+h1 span {
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+h1 span:hover {
+  animation: bounce 0.5s;
+  transform: scale(1.2);
+}
+
+/* Style pour l'icône SVG */
+svg {
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.2));
+  transition: transform 0.3s;
+}
+
+svg:hover {
+  transform: rotate(15deg);
+}
