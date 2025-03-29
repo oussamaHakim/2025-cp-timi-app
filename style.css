@@ -77,6 +77,7 @@
   max-width: 500px; /* Augmentation de la largeur maximale */
   margin: 0 auto;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  min-width: 300px;
 }
 
 .tableau-header {
@@ -167,6 +168,10 @@
   user-select: none;
   transition: transform 0.1s, box-shadow 0.2s;
   margin: 0 auto; /* Centrage */
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
+  width: clamp(2.5rem, 8vw, 3rem);
+  height: clamp(2.5rem, 8vw, 3rem);
+  touch-action: none; /* Améliore l'expérience tactile sur mobile */
 }
 
 .digit:hover {
@@ -206,6 +211,7 @@
   border: 2px dashed #93c5fd;
   min-height: 70px; /* Même hauteur que les cellules d'en-tête */
   padding: 5px; /* Padding pour une apparence plus aérée */
+  min-height: 3rem;
 }
 
 .drop-zone.highlight {
@@ -398,6 +404,11 @@
     height: 45px;
     font-size: 22px;
   }
+
+  .tableau-cell {
+    padding: 0.5rem 0.25rem;
+    min-width: 60px;
+  }
 }
 
 /* Style pour le nombre cible à décomposer */
@@ -416,6 +427,7 @@
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
   position: relative;
   min-width: 180px;
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
 }
 
 .target-number::before {
@@ -464,4 +476,13 @@ svg {
 
 svg:hover {
   transform: rotate(15deg);
+}
+
+/* Adaptation pour les écrans très petits */
+@media (max-width: 360px) {
+  .digit {
+    font-size: 1rem;
+    width: 2rem;
+    height: 2rem;
+  }
 }

@@ -10,20 +10,20 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body class="bg-blue-50 min-h-screen">
-    <div class="container mx-auto px-4 py-8">
+    <div class="container mx-auto px-4 py-4 sm:py-8">
       <!-- Titre du jeu avec lettres colorées et icône -->
-      <div class="flex items-center justify-center mb-6">
+      <div class="flex items-center justify-center mb-4 sm:mb-6">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="42"
-          height="42"
+          width="32"
+          height="32"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           stroke-width="2"
           stroke-linecap="round"
           stroke-linejoin="round"
-          class="text-indigo-600 mr-3"
+          class="text-indigo-600 mr-2 sm:mr-3 sm:w-10 sm:h-10"
         >
           <line x1="6" x2="10" y1="11" y2="11" />
           <line x1="8" x2="8" y1="9" y2="13" />
@@ -33,7 +33,7 @@
             d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"
           />
         </svg>
-        <h1 class="text-3xl font-bold text-center">
+        <h1 class="text-2xl sm:text-3xl font-bold text-center">
           <span class="text-red-500">T</span
           ><span class="text-orange-500">i</span
           ><span class="text-yellow-500">m</span
@@ -53,57 +53,72 @@
         </h1>
       </div>
 
-      <div class="bg-white rounded-lg shadow-lg p-6 max-w-lg mx-auto">
-        <div class="mb-6">
-          <p class="text-lg text-gray-700 mb-4 text-center">
+      <div class="bg-white rounded-lg shadow-lg p-4 sm:p-6 max-w-lg mx-auto">
+        <div class="mb-4 sm:mb-6">
+          <p
+            class="text-base sm:text-lg text-gray-700 mb-3 sm:mb-4 text-center"
+          >
             Décompose ce nombre en plaçant chaque chiffre à la bonne position :
           </p>
 
           <!-- Nombre à décomposer - style amélioré -->
-          <div class="text-center mb-6">
+          <div class="text-center mb-4 sm:mb-6">
             <div class="target-number">
-              <span id="randomNumber">3254</span>
+              <span id="randomNumber" class="text-3xl sm:text-4xl">3254</span>
             </div>
           </div>
 
-          <!-- Chiffres à glisser-déposer - conteneur unique qui sera rempli par JS -->
-          <div id="digitContainer" class="mb-8">
+          <!-- Chiffres à glisser-déposer - conteneur responsive -->
+          <div
+            id="digitContainer"
+            class="mb-6 sm:mb-8 flex flex-wrap justify-center gap-2 sm:gap-4"
+          >
             <!-- Le contenu sera généré par JavaScript -->
           </div>
         </div>
 
         <!-- Instructions pour l'exercice -->
-        <div class="mb-4 text-center text-sm text-blue-700 font-medium">
+        <div
+          class="mb-3 sm:mb-4 text-center text-xs sm:text-sm text-blue-700 font-medium"
+        >
           <p>Choisis les bons chiffres parmi ceux proposés</p>
         </div>
 
-        <!-- Tableau de numération pour le drag and drop -->
-        <div class="mb-8">
-          <div class="tableau-numeration">
+        <!-- Tableau de numération pour le drag and drop - version responsive -->
+        <div class="mb-6 sm:mb-8 overflow-x-auto">
+          <div class="tableau-numeration min-w-[300px]">
             <div class="tableau-header">
-              <div class="tableau-cell milliers-header">Milliers</div>
-              <div class="tableau-cell centaines-header">Centaines</div>
-              <div class="tableau-cell dizaines-header">Dizaines</div>
-              <div class="tableau-cell unites-header">Unités</div>
+              <div class="tableau-cell milliers-header text-xs sm:text-base">
+                Milliers
+              </div>
+              <div class="tableau-cell centaines-header text-xs sm:text-base">
+                Centaines
+              </div>
+              <div class="tableau-cell dizaines-header text-xs sm:text-base">
+                Dizaines
+              </div>
+              <div class="tableau-cell unites-header text-xs sm:text-base">
+                Unités
+              </div>
             </div>
             <div class="tableau-row">
               <div
-                class="tableau-cell drop-zone"
+                class="tableau-cell drop-zone h-12 sm:h-16"
                 data-position="milliers"
                 id="drop-milliers"
               ></div>
               <div
-                class="tableau-cell drop-zone"
+                class="tableau-cell drop-zone h-12 sm:h-16"
                 data-position="centaines"
                 id="drop-centaines"
               ></div>
               <div
-                class="tableau-cell drop-zone"
+                class="tableau-cell drop-zone h-12 sm:h-16"
                 data-position="dizaines"
                 id="drop-dizaines"
               ></div>
               <div
-                class="tableau-cell drop-zone"
+                class="tableau-cell drop-zone h-12 sm:h-16"
                 data-position="unites"
                 id="drop-unites"
               ></div>
@@ -112,22 +127,22 @@
         </div>
 
         <!-- Instructions pour retourner les chiffres -->
-        <div class="mb-4 text-center text-sm text-gray-600">
+        <div class="mb-4 text-center text-xs sm:text-sm text-gray-600">
           <p>Double-clique sur un chiffre pour le retirer et le replacer</p>
         </div>
 
         <div
-          class="flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-4"
+          class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4"
         >
           <button
             id="verifierBtn"
-            class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-md"
+            class="bg-green-500 hover:bg-green-600 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition duration-300 shadow-md text-sm sm:text-base"
           >
             Vérifier
           </button>
           <button
             id="nouveauBtn"
-            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 shadow-md"
+            class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 sm:py-3 px-4 sm:px-6 rounded-lg transition duration-300 shadow-md text-sm sm:text-base"
           >
             Nouveau Nombre
           </button>
@@ -135,11 +150,11 @@
 
         <div
           id="resultat"
-          class="mt-6 text-center text-xl font-semibold hidden"
+          class="mt-4 sm:mt-6 text-center text-lg sm:text-xl font-semibold hidden"
         ></div>
 
-        <div id="scoreContainer" class="mt-6 text-center">
-          <p class="text-gray-700">
+        <div id="scoreContainer" class="mt-4 sm:mt-6 text-center">
+          <p class="text-gray-700 text-sm sm:text-base">
             Score: <span id="score" class="font-bold">0</span> sur
             <span id="tentatives" class="font-bold">0</span>
           </p>

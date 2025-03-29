@@ -1,5 +1,42 @@
 // JavaScript du jeu de décomposition des nombres avec drag and drop
+
+// Améliorer l'expérience tactile sur les appareils mobiles
+function enhanceTouchExperience() {
+  // Empêcher le zoom sur double-tap pour iOS
+  document.addEventListener(
+    "touchend",
+    function (e) {
+      const now = Date.now();
+      const DOUBLE_TAP_DELAY = 300;
+
+      if (now - lastTap < DOUBLE_TAP_DELAY) {
+        e.preventDefault();
+      }
+      lastTap = now;
+    },
+    false
+  );
+
+  // Gérer le scroll lors du glisser-déposer sur mobile
+  const dragElements = document.querySelectorAll(".digit");
+  dragElements.forEach((el) => {
+    el.addEventListener(
+      "touchmove",
+      function (e) {
+        // Empêcher le scroll de page pendant le drag sur mobile
+        e.preventDefault();
+      },
+      { passive: false }
+    );
+  });
+}
+
+// Variable pour détecter le double tap
+let lastTap = 0;
+
 document.addEventListener("DOMContentLoaded", () => {
+  enhanceTouchExperience();
+
   // Variables globales
   let nombreActuel = 0;
   let score = 0;
