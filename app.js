@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let score = 0;
   let tentatives = 0;
   let digitElements = [];
+  let niveauActuel = 4; // Par défaut: niveau 4 (milliers, centaines, dizaines, unités)
 
   // Éléments du DOM
   const randomNumberElement = document.getElementById("randomNumber");
@@ -54,10 +55,89 @@ document.addEventListener("DOMContentLoaded", () => {
   const confettiContainer = document.getElementById("confettiContainer");
   const dropZones = document.querySelectorAll(".drop-zone");
 
-  // Fonction pour générer un nombre aléatoire entre 1 et 9999 (sans zéros en tête)
+  // Boutons de niveau
+  const niveau1Btn = document.getElementById("niveau1");
+  const niveau2Btn = document.getElementById("niveau2");
+  const niveau3Btn = document.getElementById("niveau3");
+  const niveau4Btn = document.getElementById("niveau4");
+
+  // Fonction pour générer un nombre aléatoire selon le niveau
   function genererNombreAleatoire() {
-    // Générer un nombre entre 1 et 9999 pour éviter les zéros en tête
-    return Math.floor(Math.random() * 9999) + 1;
+    let min, max;
+
+    switch (niveauActuel) {
+      case 1: // Unités seulement (1-9)
+        min = 1;
+        max = 9;
+        break;
+      case 2: // Dizaines et Unités (10-99)
+        min = 10;
+        max = 99;
+        break;
+      case 3: // Centaines, Dizaines, Unités (100-999)
+        min = 100;
+        max = 999;
+        break;
+      case 4: // Milliers, Centaines, Dizaines, Unités (1000-9999)
+      default:
+        min = 1000;
+        max = 9999;
+        break;
+    }
+
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
+  // Mise à jour de l'interface selon le niveau
+  function mettreAJourNiveau(niveau) {
+    niveauActuel = niveau;
+
+    // Mise à jour visuelle des boutons
+    [niveau1Btn, niveau2Btn, niveau3Btn, niveau4Btn].forEach((btn) => {
+      btn.classList.remove("ring", "ring-offset-2", "ring-blue-400");
+    });
+
+    switch (niveau) {
+      case 1:
+        niveau1Btn.classList.add("ring", "ring-offset-2", "ring-blue-400");
+        break;
+      case 2:
+        niveau2Btn.classList.add("ring", "ring-offset-2", "ring-blue-400");
+        break;
+      case 3:
+        niveau3Btn.classList.add("ring", "ring-offset-2", "ring-blue-400");
+        break;
+      case 4:
+        niveau4Btn.classList.add("ring", "ring-offset-2", "ring-blue-400");
+        break;
+    }
+
+    // Générer un nouveau nombre adapté au niveau
+    mettreAJourNombre();
+  }
+
+  // Fonction pour ajuster l'affichage du tableau selon le niveau
+  function ajusterAffichageTableau() {
+    // On cache toutes les cellules d'en-tête et de drop d'abord
+    document
+      .querySelectorAll(".milliers-header, #drop-milliers")
+      .forEach((el) => {
+        el.style.display = niveauActuel >= 4 ? "flex" : "none";
+      });
+
+    document
+      .querySelectorAll(".centaines-header, #drop-centaines")
+      .forEach((el) => {
+        el.style.display = niveauActuel >= 3 ? "flex" : "none";
+      });
+
+    document
+      .querySelectorAll(".dizaines-header, #drop-dizaines")
+      .forEach((el) => {
+        el.style.display = niveauActuel >= 2 ? "flex" : "none";
+      });
+
+    // Les unités sont toujours visibles
   }
 
   // Fonction pour créer les éléments de chiffre glissables
@@ -66,21 +146,18 @@ document.addEventListener("DOMContentLoaded", () => {
     digitContainer.innerHTML = "";
     digitElements = [];
 
-    // Convertir le nombre en chaîne de caractères (sans padStart pour éviter les zéros en tête)
+    // Convertir le nombre en chaîne de caractères
     const nombreString = nombre.toString();
     const chiffresOriginaux = nombreString.split("");
 
-    // Déterminer combien de cellules doivent être visibles selon le nombre de chiffres
-    const nombreDeChiffres = nombreString.length;
-
-    // N'afficher que les cellules nécessaires selon le nombre de chiffres
-    ajusterAffichageTableau(nombreDeChiffres);
+    // Ajuster l'affichage du tableau selon le niveau actuel
+    ajusterAffichageTableau();
 
     // Créer un ensemble de chiffres avec des distracteurs
-    let tousLesChiffres = [...chiffresOriginaux]; // Commencer par les chiffres originaux
+    let tousLesChiffres = [...chiffresOriginaux];
 
     // Ajouter des chiffres aléatoires comme distracteurs (2-4 chiffres supplémentaires)
-    const nombreDeDistracteurs = Math.floor(Math.random() * 3) + 2; // 2 à 4 distracteurs
+    const nombreDeDistracteurs = Math.floor(Math.random() * 3) + 2;
     for (let i = 0; i < nombreDeDistracteurs; i++) {
       const chiffreAleatoire = Math.floor(Math.random() * 10).toString();
       tousLesChiffres.push(chiffreAleatoire);
@@ -95,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ];
     }
 
-    // Organiser les chiffres en grille (pour un meilleur affichage si nombreux)
+    // Organiser les chiffres en grille
     const conteneurGrille = document.createElement("div");
     conteneurGrille.className = "digit-grid";
     digitContainer.appendChild(conteneurGrille);
@@ -109,6 +186,12 @@ document.addEventListener("DOMContentLoaded", () => {
       digitElement.setAttribute("data-digit", chiffre);
       digitElement.id = `digit-${index}`;
 
+      // S'assurer que le chiffre est bien visible
+      digitElement.style.position = "relative";
+      digitElement.style.display = "flex";
+      digitElement.style.visibility = "visible";
+      digitElement.style.opacity = "1";
+
       // Événements de drag and drop
       digitElement.addEventListener("dragstart", dragStart);
       // Double-clic pour retourner à la position initiale
@@ -117,30 +200,6 @@ document.addEventListener("DOMContentLoaded", () => {
       conteneurGrille.appendChild(digitElement);
       digitElements.push(digitElement);
     });
-  }
-
-  // Fonction pour ajuster l'affichage du tableau selon le nombre de chiffres
-  function ajusterAffichageTableau(nombreDeChiffres) {
-    // On cache toutes les cellules d'en-tête et de drop d'abord
-    document
-      .querySelectorAll(".milliers-header, #drop-milliers")
-      .forEach((el) => {
-        el.style.display = nombreDeChiffres >= 4 ? "flex" : "none";
-      });
-
-    document
-      .querySelectorAll(".centaines-header, #drop-centaines")
-      .forEach((el) => {
-        el.style.display = nombreDeChiffres >= 3 ? "flex" : "none";
-      });
-
-    document
-      .querySelectorAll(".dizaines-header, #drop-dizaines")
-      .forEach((el) => {
-        el.style.display = nombreDeChiffres >= 2 ? "flex" : "none";
-      });
-
-    // Les unités sont toujours visibles
   }
 
   // Fonction pour retourner un chiffre au conteneur
@@ -153,19 +212,24 @@ document.addEventListener("DOMContentLoaded", () => {
       // Retirer la classe "filled" de la zone
       dropZone.classList.remove("filled");
 
-      // Rendre l'élément à nouveau draggable (au cas où)
+      // Rendre l'élément à nouveau draggable
       e.target.setAttribute("draggable", true);
 
-      // Réinitialiser le style
+      // Réinitialiser le style pour s'assurer que le chiffre est visible
       e.target.style.transform = "none";
+      e.target.style.visibility = "visible";
+      e.target.style.opacity = "1";
 
       // Déplacer le chiffre vers le conteneur de grille
       const grilleContainer = document.querySelector(".digit-grid");
       if (grilleContainer) {
         grilleContainer.appendChild(e.target);
       } else {
-        // Si la grille n'existe pas pour une raison quelconque, revenir à l'ancien comportement
-        digitContainer.appendChild(e.target);
+        // Si la grille n'existe pas pour une raison quelconque, créer une nouvelle
+        const nouvelleGrille = document.createElement("div");
+        nouvelleGrille.className = "digit-grid";
+        digitContainer.appendChild(nouvelleGrille);
+        nouvelleGrille.appendChild(e.target);
       }
     }
   }
@@ -173,7 +237,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Fonction pour mettre à jour l'affichage du nombre
   function mettreAJourNombre() {
     nombreActuel = genererNombreAleatoire();
-    randomNumberElement.textContent = nombreActuel.toString(); // Sans padStart
+    randomNumberElement.textContent = nombreActuel.toString();
 
     // Créer les éléments de chiffres glissables
     creerElementsChiffres(nombreActuel);
@@ -186,6 +250,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Cacher le résultat
     resultatElement.classList.add("hidden");
+
+    // S'assurer que le conteneur de la grille est visible
+    const grilleContainer = document.querySelector(".digit-grid");
+    if (grilleContainer) {
+      grilleContainer.style.visibility = "visible";
+      grilleContainer.style.display = "grid";
+    }
   }
 
   // Fonctions pour le drag and drop
@@ -241,12 +312,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function verifierReponse() {
     // Convertir le nombre actuel en chaîne pour obtenir sa longueur
     const nombreActuelString = nombreActuel.toString();
-    const longueurNombre = nombreActuelString.length;
 
     // Vérifier si toutes les zones visibles sont remplies
     const zonesVisibles = [...dropZones].filter(
       (zone) => zone.style.display !== "none"
     );
+
     if (zonesVisibles.some((zone) => !zone.querySelector(".digit"))) {
       alert("Place tous les chiffres dans le tableau avant de vérifier !");
       return;
@@ -254,13 +325,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Récupérer les chiffres placés uniquement dans les zones visibles
     let chiffresCombines = "";
-    if (longueurNombre >= 4) {
+
+    if (niveauActuel >= 4 && dropZones[0].style.display !== "none") {
       chiffresCombines += dropZones[0].querySelector(".digit").textContent;
     }
-    if (longueurNombre >= 3) {
+    if (niveauActuel >= 3 && dropZones[1].style.display !== "none") {
       chiffresCombines += dropZones[1].querySelector(".digit").textContent;
     }
-    if (longueurNombre >= 2) {
+    if (niveauActuel >= 2 && dropZones[2].style.display !== "none") {
       chiffresCombines += dropZones[2].querySelector(".digit").textContent;
     }
     // Les unités sont toujours incluses
@@ -363,6 +435,12 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 5000);
   }
 
+  // Configuration des événements pour les boutons de niveau
+  niveau1Btn.addEventListener("click", () => mettreAJourNiveau(1));
+  niveau2Btn.addEventListener("click", () => mettreAJourNiveau(2));
+  niveau3Btn.addEventListener("click", () => mettreAJourNiveau(3));
+  niveau4Btn.addEventListener("click", () => mettreAJourNiveau(4));
+
   // Configuration des événements
   verifierBtn.addEventListener("click", verifierReponse);
   nouveauBtn.addEventListener("click", mettreAJourNombre);
@@ -370,6 +448,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialiser les zones de dépôt
   initDropZones();
 
-  // Initialiser le jeu au chargement
-  mettreAJourNombre();
+  // Définir le niveau par défaut (niveau 4 - tous les chiffres)
+  mettreAJourNiveau(4);
 });
